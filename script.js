@@ -1,23 +1,18 @@
-fetch("https://paktopup537.blogspot.com/videos.json")
+const jsonURL = "https://drive.google.com/uc?export=download&id=1POal5jPOxX6AeJNY8GcCIQ4KY8Oh-kig";
+
+fetch(jsonURL)
     .then(response => response.json())
     .then(videos => {
-        const videoGallery = document.getElementById('videoGallery');
-        videoGallery.innerHTML = '';
-
+        const videoGallery = document.getElementById("videoGallery");
         videos.forEach(video => {
-            const videoItem = document.createElement('div');
-            videoItem.className = 'video-item';
-            videoItem.innerHTML = `
-                <iframe src="https://www.youtube.com/embed/${getYouTubeID(video.videoSrc)}" allowfullscreen></iframe>
-                <h3>${video.title}</h3>
-                <a href="${video.downloadLink}" class="download-link" target="_blank">Download</a>
+            videoGallery.innerHTML += `
+                <div class="video-container">
+                    <h3>${video.title}</h3>
+                    <iframe src="${video.videoSrc}" allowfullscreen></iframe>
+                    <br>
+                    <a href="${video.downloadLink}" target="_blank">Download</a>
+                </div>
             `;
-            videoGallery.appendChild(videoItem);
         });
-    });
-
-function getYouTubeID(url) {
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : '';
-}
+    })
+    .catch(error => console.error("Error loading videos:", error));
